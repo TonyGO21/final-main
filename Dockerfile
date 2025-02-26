@@ -6,17 +6,17 @@ WORKDIR /app
 
 # Копируем файлы в контейнер
 COPY go.mod go.sum ./
-RUN go mod download
+RUN go mod tidy
 
 COPY . .
 
 # Собираем бинарный файл
-RUN go build -o parcel-tracker main.go
+RUN go build -o parcel-tracker .
 
 # Используем минимальный образ для запуска приложения
 FROM alpine:latest
 
-WORKDIR /root/
+WORKDIR /app
 
 # Устанавливаем зависимости
 RUN apk add --no-cache sqlite
@@ -28,4 +28,4 @@ COPY --from=builder /app/parcel-tracker .
 COPY tracker.db .
 
 # Запускаем приложение
-CMD ["./parcel-tracker"]
+ENTRYPOINT ["./parcel-tracker"]
