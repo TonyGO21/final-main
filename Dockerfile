@@ -27,3 +27,5 @@ COPY --from=builder /app/parcel-tracker .
 # Копируем базу данных (если нужна)
 COPY tracker.db .
 
+# Запускаем приложение
+ENTRYPOINT ["./parcel-tracker"]
